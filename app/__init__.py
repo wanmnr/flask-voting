@@ -10,7 +10,7 @@ def create_app():
     # Register blueprints here if needed
     # Example: from .views.main import main
     # Register blueprints
-    from app.routes import main_bp
+    from app.views.main import main_bp
     app.register_blueprint(main_bp)
     
     return app
