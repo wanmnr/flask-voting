@@ -11,7 +11,14 @@ def home():
         # Implement your search logic here
         # For example: search_results = perform_search(search_query)
         return render_template('index.html', search_query=search_query)
-    return render_template('index.html')
+    sidebar_data = {
+        'current_section': 'home',
+        'announcements': [
+            {'title': 'New Feature Released', 'link': '#'},
+            {'title': 'Upcoming Maintenance', 'link': '#'},
+        ]
+    }
+    return render_template('index.html', sidebar_data=sidebar_data)
 
 @main_bp.route('/hello')
 def hello():
@@ -19,4 +26,11 @@ def hello():
 
 @main_bp.route('/about')
 def about():
-    return render_template('about.html')
+    sidebar_data = {
+        'current_section': 'about',
+        'team_links': [
+            {'name': 'Leadership', 'link': '#'},
+            {'name': 'Careers', 'link': '#'},
+        ]
+    }
+    return render_template('about.html', sidebar_data=sidebar_data)
