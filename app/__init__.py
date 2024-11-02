@@ -2,25 +2,38 @@
 
 from flask import Flask
 from flask_assets import Environment, Bundle
-from dotenv import load_dotenv
-
-
-load_dotenv()
 
 def create_app():
     app = Flask(__name__)
 
+    # Load config
+    if config_class:
+        app.config.from_object(config_class)
+
     # Initialize Flask-Assets
     assets = Environment(app)
+    assets.debug = False
     
     # Define asset bundles
     css = Bundle(
         'css/style.css',
         filters='cssmin',
-        output='gen/packed.css'
+        output='gen/style.min.css',
+        depends='css/*.css'
     )
+    # You can add multiple CSS files
+    # css = Bundle(
+    #     'css/style.css',
+    #     'css/navbar.css',
+    #     'css/responsive.css',
+    #     filters='cssmin',
+    #     output='gen/style.min.css'
+    # )
     # Register bundles
     assets.register('css_all', css)
+    # Optional: Configure cache settings
+    app.config['ASSETS_CACHE'] = True
+    app.config['ASSETS_AUTO_BUILD'] = True
 
     # Register blueprints here if needed
     # Example: from .views.main import main
