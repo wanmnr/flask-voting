@@ -1,12 +1,24 @@
+<!-- index.html -->
+
 {% extends "base.html" %}
 
 {% block title %}Home{% endblock %}
 
+{% block sidebar %}
+<h3>Latest Updates</h3>
+<ul>
+    <li><a href="#">News Item 1</a></li>
+    <li><a href="#">News Item 2</a></li>
+    <li><a href="#">News Item 3</a></li>
+</ul>
+{% endblock %}
+
 {% block content %}
-    <h1>Welcome to the Home Page</h1>
-    <p>This is the main page of our Flask application.</p>
-    <div class="featured-content">
-        <h2>Featured Content</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-    </div>
+<h1>Welcome to the Home Page</h1>
+<p>This is the main page of our Flask application.</p>
+<div class="featured-content">
+    <h2>Featured Content</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore
+        magna aliqua.</p>
+</div>
 {% endblock %}
