@@ -9,6 +9,8 @@ python-dotenv = "*"
 jinja2 = "*"
 flask-assets = "*"
 cssmin = "*"
+flask-sqlalchemy = "*"
+flask-login = "*"
 
 [dev-packages]
 
