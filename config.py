@@ -1,6 +1,6 @@
 class Config:
     # Base config
-    ASSETS_DEBUG = False
+    ASSETS_DEBUG = True
 
 class DevelopmentConfig(Config):
     DEBUG = True
