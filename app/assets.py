@@ -1,4 +1,4 @@
-# assets.py
+# app/assets.py
 
 from flask_assets import Environment, Bundle
 
