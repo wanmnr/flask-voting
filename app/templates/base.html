@@ -28,6 +28,18 @@
                 </button>
             </form>
         </div>
+        <div class="auth-buttons">
+            {% if current_user.is_authenticated %}
+                <div class="user-menu">
+                    <span class="username">{{ current_user.username }}</span>
+                    <a href="{{ url_for('main.profile') }}" class="btn">Profile</a>
+                    <a href="{{ url_for('auth.logout') }}" class="btn btn-logout">Logout</a>
+                </div>
+            {% else %}
+                <a href="{{ url_for('auth.login') }}" class="btn btn-login">Login</a>
+                <a href="{{ url_for('auth.register') }}" class="btn btn-signup">Sign Up</a>
+            {% endif %}
+        </div>
     </nav>
 
     <div class="page-wrapper">
@@ -41,6 +53,14 @@
         </aside>
 
         <main class="main-content">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            
             {% block content %}
             {% endblock %}
         </main>
