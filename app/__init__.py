@@ -8,6 +8,7 @@ from .assets import init_assets
 
 db = SQLAlchemy()
 login_manager = LoginManager()
+login_manager.login_view = 'auth.login'  # Specify the login route
 
 def create_app(config_class=None):
     app = Flask(__name__)
