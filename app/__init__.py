@@ -1,43 +1,23 @@
 # app/__init__.py
 
 from flask import Flask
-from flask_assets import Environment, Bundle
+from .cli import init_cli
+from .assets import init_assets
 
-def create_app():
+def create_app(config_class=None):
     app = Flask(__name__)
 
     # Load config
     if config_class:
         app.config.from_object(config_class)
 
-    # Initialize Flask-Assets
-    assets = Environment(app)
-    assets.debug = False
-    
-    # Define asset bundles
-    css = Bundle(
-        'css/style.css',
-        filters='cssmin',
-        output='gen/style.min.css',
-        depends='css/*.css'
-    )
-    # You can add multiple CSS files
-    # css = Bundle(
-    #     'css/style.css',
-    #     'css/navbar.css',
-    #     'css/responsive.css',
-    #     filters='cssmin',
-    #     output='gen/style.min.css'
-    # )
-    # Register bundles
-    assets.register('css_all', css)
-    # Optional: Configure cache settings
-    app.config['ASSETS_CACHE'] = True
-    app.config['ASSETS_AUTO_BUILD'] = True
+    # Initialize flask-assets
+    init_assets(app)
+
+    # Import and register CLI commands
+    init_cli(app)
 
     # Register blueprints here if needed
-    # Example: from .views.main import main
-    # Register blueprints
     from app.views.main import main_bp
     app.register_blueprint(main_bp)
     
