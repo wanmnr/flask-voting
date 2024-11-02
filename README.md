@@ -77,6 +77,21 @@ flask assets clean
 flask assets watch
 ```
 
+## DB Related
+
+### For first-time setup:
+
+```bash
+flask db create
+flask db init
+```
+
+### For complete reset:
+
+```bash
+flask db recreate  # This now includes initialization
+```
+
 ## Deployment
 
 ### For production deployment:
@@ -85,12 +100,6 @@ flask assets watch
 
 ```bash
 export FLASK_ENV=production
-```
-
-#### Build assets:
-
-```bash
-flask assets build
 ```
 
 #### Run using a production server:
