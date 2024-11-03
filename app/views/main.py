@@ -1,6 +1,7 @@
 # app/views/main.py
 
 from flask import Blueprint, render_template, request
+from flask_login import login_required, current_user
 
 main_bp = Blueprint('main', __name__)
 
@@ -34,3 +35,8 @@ def about():
         ]
     }
     return render_template('about.html', sidebar_data=sidebar_data)
+
+@main_bp.route('/profile')
+@login_required
+def profile():
+    return render_template('profile.html')
