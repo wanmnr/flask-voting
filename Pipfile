@@ -12,6 +12,7 @@ cssmin = "*"
 flask-sqlalchemy = "*"
 flask-login = "*"
 flask-migrate = "*"
+flask-env = "*"
 
 [dev-packages]
 
