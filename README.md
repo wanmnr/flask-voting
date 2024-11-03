@@ -92,6 +92,30 @@ flask db init
 flask db recreate  # This now includes initialization
 ```
 
+#### 1. Create database tables
+
+```bash
+flask db create
+```
+
+#### 2. Initialize with default data
+
+```bash
+flask db init
+```
+
+#### For cleanup/reset:
+
+```bash
+flask db drop
+```
+
+#### For reset and recreate:
+
+```bash
+flask db recreate
+```
+
 ## Deployment
 
 ### For production deployment:
