@@ -4,6 +4,7 @@ import click
 import time
 from flask import current_app
 from flask.cli import with_appcontext
+from app.extensions import db
 
 @click.group(name='assets')
 def assets_cli():
