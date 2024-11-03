@@ -4,7 +4,8 @@ from app import create_app
 from config import DevelopmentConfig, ProductionConfig
 import os
 from dotenv import load_dotenv
-from app.cli import build_assets_command
+from app.cli import build_assets_command, db_cli
+
 
 load_dotenv()  # Load environment variables from .env file
 
