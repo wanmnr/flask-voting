@@ -1,26 +1,28 @@
 <!-- app/templates/components/sidebar.html -->
 <h3>Quick Links</h3>
 <ul>
-    <li><a href="#" {% if sidebar_data.current_section=='home' %}class="active" {% endif %}>Documentation</a></li>
-    <li><a href="#" {% if sidebar_data.current_section=='about' %}class="active" {% endif %}>Getting Started</a></li>
+    <li><a href="#" {% if sidebar_data and sidebar_data.current_section=='home' %}class="active" {% endif
+            %}>Documentation</a></li>
+    <li><a href="#" {% if sidebar_data and sidebar_data.current_section=='about' %}class="active" {% endif %}>Getting
+            Started</a></li>
     <li><a href="#">Tutorials</a></li>
     <li><a href="#">API Reference</a></li>
 </ul>
 
-{% if sidebar_data.announcements %}
-    <h3>Announcements</h3>
-    <ul>
-        {% for announcement in sidebar_data.announcements %}
-            <li><a href="{{ announcement.link }}">{{ announcement.title }}</a></li>
-        {% endfor %}
-    </ul>
+{% if sidebar_data and sidebar_data.announcements %}
+<h3>Announcements</h3>
+<ul>
+    {% for announcement in sidebar_data.announcements %}
+    <li><a href="{{ announcement.link }}">{{ announcement.title }}</a></li>
+    {% endfor %}
+</ul>
 {% endif %}
 
-{% if sidebar_data.team_links %}
-    <h3>Team Information</h3>
-    <ul>
-        {% for link in sidebar_data.team_links %}
-            <li><a href="{{ link.link }}">{{ link.name }}</a></li>
-        {% endfor %}
-    </ul>
+{% if sidebar_data and sidebar_data.team_links %}
+<h3>Team Information</h3>
+<ul>
+    {% for link in sidebar_data.team_links %}
+    <li><a href="{{ link.link }}">{{ link.name }}</a></li>
+    {% endfor %}
+</ul>
 {% endif %}
