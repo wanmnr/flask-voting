@@ -263,7 +263,72 @@ cython_debug/
 
 
 
-
-# Additional Ignore list
+#########################
+###  Author Addition  ###
+#########################
 app/static/gen/*
 !app/static/gen/.gitkeep
+*.db
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Flask
+instance/
+.webassets-cache
+
+# Logs
+logs/*
+!logs/.gitkeep
+
+# Environment Variables
+.env
+
+# Database
+*.db
+*.sqlite
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# Development
+.DS_Store
+node_modules/
