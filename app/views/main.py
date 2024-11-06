@@ -19,7 +19,9 @@ def home():
             {'title': 'Upcoming Maintenance', 'link': '#'},
         ]
     }
-    return render_template('index.html', sidebar_data=sidebar_data)
+    return render_template('index.html', 
+                         sidebar_data=sidebar_data, 
+                         search_query=search_query)
 
 @main_bp.route('/hello')
 def hello():
@@ -40,3 +42,11 @@ def about():
 @login_required
 def profile():
     return render_template('profile.html')
+
+@main_bp.route('/privacy')
+def privacy():
+    return render_template('privacy.html')
+
+@main_bp.route('/terms')
+def terms():
+    return render_template('terms.html')
