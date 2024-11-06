@@ -1,8 +1,10 @@
-<!-- index.html -->
+<!-- app/templates/pages/index.html -->
 
 {% extends "base.html" %}
 
 {% block title %}Home{% endblock %}
+
+{% block meta_description %}home{% endblock %}
 
 {% block extra_sidebar %}
 <h3>Latest Updates</h3>
@@ -21,4 +23,13 @@
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore
         magna aliqua.</p>
 </div>
+{% endblock %}
+
+
+{% block styles %}
+<!-- Page-specific CSS here -->
+{% endblock %}
+
+{% block scripts %}
+<!-- Page-specific JavaScript here -->
 {% endblock %}
