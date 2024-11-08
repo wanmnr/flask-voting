@@ -1,0 +1,26 @@
+# Flask Application Settings
+FLASK_APP=run.py
+FLASK_ENV=development
+FLASK_DEBUG=1
+FLASK_HOST=0.0.0.0
+FLASK_PORT=5000
+
+# Logging
+LOG_LEVEL=INFO
+
+# Asset Configuration
+ASSETS_DEBUG=1
+
+# Feature Flags
+ENABLE_REGISTRATION=1
+ENABLE_OAUTH=0
+ENABLE_2FA=0
+ENABLE_FILE_UPLOAD=1
+
+# API Documentation
+API_TITLE="Voting System API"
+API_VERSION="v1"
+
+# Internationalization
+BABEL_DEFAULT_LOCALE=en
+BABEL_DEFAULT_TIMEZONE=UTC
