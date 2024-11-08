@@ -332,3 +332,18 @@ celerybeat.pid
 # Development
 .DS_Store
 node_modules/
+
+# Environment variables
+.env
+*.pyc
+__pycache__/
+instance/
+logs/
+uploads/
+
+# Database
+*.db
+*.sqlite
+
+# Assets
+app/static/dist/
