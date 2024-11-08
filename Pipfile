@@ -12,9 +12,15 @@ cssmin = "*"
 flask-sqlalchemy = "*"
 flask-login = "*"
 flask-migrate = "*"
+flask-mail = "*"
 flask-env = "*"
 
 [dev-packages]
+pytest = "*"
+pytest-cov = "*"
+pytest-mock = "*"
+black = "*"
+mypy = "*"
 
 [requires]
 python_version = "3.12"
