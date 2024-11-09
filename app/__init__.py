@@ -1,50 +1,67 @@
 # app/__init__.py
 
-from flask import Flask
-from .utils.utils import get_context_processors
-from .extensions import db, login_manager
-from .cli import init_cli
-from .assets import init_assets
+from flask import Flask, request, session
+from app.cli import register_commands
+# from flask_babel import Babel
+from app.core.extensions import (
+    db, init_assets, login_manager, migrate, assets, cache, mail, 
+    limiter, jwt, csrf
+)
 
-@login_manager.user_loader
-def load_user(id):
-    from .models import User  # Import here to avoid circular import
-    return User.query.get(int(id))
+from app.core.errors import register_error_handlers
+# from app.core.security import configure_security
+from app.core.auth import init_login_manager
+from app.cli import register_commands
+from app.utils.utils import get_context_processors
 
-def create_app(config_class=None):
-    app = Flask(__name__)
+# Initialize Babel for internationalization
+# babel = Babel()
 
-    # Load config
-    if config_class:
-        app.config.from_object(config_class)
+# def get_locale():
+#     if 'language' in session:
+#         return session['language']
+#     return request.accept_languages.best_match(['en', 'es', 'fr'])
+
+def create_app(config_object):
+    """Create application factory."""
+    app = Flask(__name__, instance_relative_config=True)
+
+    # Load the configuration
+    app.config.from_object(config_object)
+    
+    # Load instance config if it exists
+    app.config.from_pyfile('config.py', silent=True)
 
     # Register context processor
     app.context_processor(get_context_processors())
 
     # Initialize extensions
-    db.init_app(app)
-    login_manager.init_app(app)
-
-    # Initialize flask-assets
+    extensions = [
+        db, login_manager, cache, mail,
+        limiter, jwt, csrf
+    ]
+    for extension in extensions:
+        extension.init_app(app)
+    
+    # Special initializations
+    migrate.init_app(app, db)
     init_assets(app)
+    init_login_manager(app)
 
-    # Import and register CLI commands
-    init_cli(app)
+    # Configure security
+    # configure_security(app)
+
+    # Register error handlers
+    register_error_handlers(app)
+
+    # Initialize Babel with locale selector
+    # babel.init_app(app, locale_selector=get_locale)
+
+    # Register CLI commands
+    register_commands(app)
 
     # Register blueprints
-    from app.views.main import main_bp
-    from app.views.auth import auth_bp
-    from app.views.polls import polls_bp
-
-    app.register_blueprint(main_bp)
-    app.register_blueprint(auth_bp)
-    app.register_blueprint(polls_bp)
-    
+    from app.views import register_blueprints
+    register_blueprints(app)
     
     return app
-
-
-
-
-
-
