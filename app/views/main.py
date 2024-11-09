@@ -11,7 +11,7 @@ def home():
     if search_query:
         # Implement your search logic here
         # For example: search_results = perform_search(search_query)
-        return render_template('index.html', search_query=search_query)
+        return render_template('pages/index.html', search_query=search_query)
     sidebar_data = {
         'current_section': 'home',
         'announcements': [
@@ -19,7 +19,7 @@ def home():
             {'title': 'Upcoming Maintenance', 'link': '#'},
         ]
     }
-    return render_template('index.html', 
+    return render_template('pages/index.html', 
                          sidebar_data=sidebar_data, 
                          search_query=search_query)
 
@@ -36,7 +36,7 @@ def about():
             {'name': 'Careers', 'link': '#'},
         ]
     }
-    return render_template('about.html', sidebar_data=sidebar_data)
+    return render_template('pages/about.html', sidebar_data=sidebar_data)
 
 @main_bp.route('/profile')
 @login_required
