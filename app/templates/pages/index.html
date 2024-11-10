@@ -6,13 +6,18 @@
 
 {% block meta_description %}home{% endblock %}
 
-{% block extra_sidebar %}
-<h3>Latest Updates</h3>
-<ul>
-    <li><a href="#">News Item 1</a></li>
-    <li><a href="#">News Item 2</a></li>
-    <li><a href="#">News Item 3</a></li>
-</ul>
+{% block sidebar %}
+{{ super() }}
+<!-- Announcements Section -->
+{% if sidebar_data and sidebar_data.announcements %}
+<div class="mb-4">
+    <h3 class="h5 fw-bold border-bottom pb-2 mb-3">Additional Sidebar tailor per pages</h3>
+    <div class="nav flex-column">
+        <p>Testing</p>
+        <p>Testing</p>
+    </div>
+</div>
+{% endif %}
 {% endblock %}
 
 {% block content %}
