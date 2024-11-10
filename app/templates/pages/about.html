@@ -5,13 +5,8 @@
 
 {% block meta_description %}about{% endblock %}
 
-{% block extra_sidebar %}
-<h3>Company Info</h3>
-<ul>
-    <li><a href="#">Our History</a></li>
-    <li><a href="#">Team Members</a></li>
-    <li><a href="#">Contact Us</a></li>
-</ul>
+{% block sidebar %}
+{{ super() }}
 {% endblock %}
 
 {% block content %}
