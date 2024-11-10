@@ -8,6 +8,9 @@ def register_error_handlers(app):
     @app.errorhandler(HTTPException)
     def handle_http_error(error):
         """Handle HTTP errors."""
+        if app.debug:
+            raise error
+
         if request.is_json:
             response = {
                 'error': error.name,
@@ -22,6 +25,9 @@ def register_error_handlers(app):
     def handle_exception(error):
         """Handle non-HTTP exceptions."""
         logger.exception("An unexpected error occurred")
+        if app.debug:
+            raise error
+
         if request.is_json:
             response = {
                 'error': 'Internal Server Error',
