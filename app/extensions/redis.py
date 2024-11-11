@@ -1,5 +1,8 @@
-import redis
+# app/extensions/redis.py
 from flask import current_app
+from redis import Redis
+
+redis = Redis()
 
 def get_redis():
     """Get Redis connection."""
@@ -10,12 +13,12 @@ class RedisService:
     def set_key(key, value, expiry=None):
         client = get_redis()
         client.set(key, value, ex=expiry)
-    
+
     @staticmethod
     def get_key(key):
         client = get_redis()
         return client.get(key)
-    
+
     @staticmethod
     def delete_key(key):
         client = get_redis()
@@ -28,4 +31,3 @@ try:
     print("Connected to Redis successfully!")
 except redis.ConnectionError:
     print("Redis connection failed")
-    
