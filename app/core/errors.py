@@ -18,7 +18,7 @@ def register_error_handlers(app):
                 'status_code': error.code
             }
             return jsonify(response), error.code
-        
+
         return render_template('errors/{}.html'.format(error.code)), error.code
 
     @app.errorhandler(Exception)
@@ -35,5 +35,5 @@ def register_error_handlers(app):
                 'status_code': 500
             }
             return jsonify(response), 500
-        
+
         return render_template('errors/500.html'), 500
