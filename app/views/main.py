@@ -1,7 +1,9 @@
 # app/views/main.py
 
-from flask import Blueprint, render_template, request
+from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import login_required, current_user
+
+from app.forms.contact_form import ContactForm
 
 main_bp = Blueprint('main', __name__)
 
@@ -19,8 +21,8 @@ def home():
             {'title': 'Upcoming Maintenance', 'link': '#'},
         ]
     }
-    return render_template('pages/index.html', 
-                         sidebar_data=sidebar_data, 
+    return render_template('pages/index.html',
+                         sidebar_data=sidebar_data,
                          search_query=search_query)
 
 @main_bp.route('/hello')
@@ -37,6 +39,16 @@ def about():
         ]
     }
     return render_template('pages/about.html', sidebar_data=sidebar_data)
+
+@main_bp.route('/contact', methods=['GET', 'POST'])
+def contact():
+    form = ContactForm()
+    if form.validate_on_submit():
+        # Here you would typically process the form data
+        # For example, send an email or save to database
+        flash('Thank you for your message! We\'ll get back to you soon.', 'success')
+        return redirect(url_for('main.contact'))
+    return render_template('pages/contact.html', form=form)
 
 @main_bp.route('/profile')
 @login_required
