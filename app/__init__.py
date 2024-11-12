@@ -4,7 +4,6 @@ from flask import Flask, request, session
 from .extensions import init_db, login_manager, init_login_manager, init_assets
 from .models.user import User  # Your models
 from .core.errors import register_error_handlers
-from .core.cli import register_commands
 from .utils.utils import get_context_processors
 
 # Initialize Babel for internationalization
@@ -48,7 +47,7 @@ def create_app(config_object):
     register_error_handlers(app)
 
     # Register cli commands
-    register_commands(app)
+    # register_commands(app)
 
     # Register context processor
     app.context_processor(get_context_processors())

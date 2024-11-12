@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from app.config import configs
 from app import create_app
 from app.utils.logger import setup_logging, get_logger
+from app.core.cli import register_commands
 
 # Load environment variables
 def load_environment():
@@ -27,7 +28,7 @@ def get_app_settings():
     host = os.getenv("FLASK_HOST", "0.0.0.0")
     port = int(os.getenv("FLASK_PORT", "5000"))
     debug = os.getenv("FLASK_DEBUG", "0") == "1"
-    
+
     settings = {
         'host': host,
         'port': port,
@@ -40,22 +41,25 @@ def get_app_settings():
 def initialize_app():
     # Setup logging first
     setup_logging()
-    
+
     # Get logger after setup
     logger = get_logger()
     logger.info("Starting application initialization")
-    
+
     # Load environment variables
     load_environment()
-    
+
     # Get environment name
     env = os.getenv("FLASK_ENV", "development")
     logger.info(f"Running in {env} environment")
-    
+
     # Create app with appropriate config
     logger.debug(f"Creating Flask app with {env} configuration")
     app = create_app(configs[env])
     logger.info("Flask application created successfully")
+
+    register_commands(app)
+    logger.info("Flask commands registered successfully")
 
     return app
 
@@ -69,11 +73,11 @@ if __name__ == "__main__":
 
         # Get logger for main execution
         logger = get_logger()
-        
+
         # Run the application
         logger.info(f"Starting Flask application on {settings['host']}:{settings['port']}")
         app.run(**settings)
-    
+
     except Exception as e:
         # Get logger for exception handling
         logger = get_logger()
