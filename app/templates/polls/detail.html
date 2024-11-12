@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}{{ poll.title }}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('polls.list') }}">Polls</a></li>
+            <li class="breadcrumb-item active">{{ poll.title }}</li>
+        </ol>
+    </nav>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+                <div>
+                    <h1 class="card-title mb-2">{{ poll.title }}</h1>
+                    <p class="text-muted mb-0">
+                        Created by {{ poll.creator.name }} on {{ poll.created_at.strftime('%B %d, %Y') }}
+                    </p>
+                </div>
+                <span class="badge bg-{{ 'success' if poll.is_active else 'secondary' }} fs-6">
+                    {{ 'Active' if poll.is_active else 'Closed' }}
+                </span>
+            </div>
+
+            <p class="card-text">{{ poll.description }}</p>
+
+            {% if poll.is_active and not has_voted %}
+            <form method="POST" action="{{ url_for('polls.vote', poll_id=poll.id) }}">
+                {{ form.csrf_token }}
+
+                {% for choice in poll.choices %}
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="choice_id" id="choice{{ choice.id }}"
+                        value="{{ choice.id }}" {% if form.choice_id.data==choice.id %}checked{% endif %}>
+                    <label class="form-check-label" for="choice{{ choice.id }}">
+                        {{ choice.text }}
+                    </label>
+                </div>
+                {% endfor %}
+
+                {% if form.choice_id.errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.choice_id.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button type="submit" class="btn btn-primary">
+                        Submit Vote
+                    </button>
+                </div>
+            </form>
+            {% else %}
+            {% if has_voted %}
+            <div class="alert alert-info">
+                You have already voted in this poll.
+                <a href="{{ url_for('polls.results', poll_id=poll.id) }}" class="alert-link">View Results</a>
+            </div>
+            {% else %}
+            <div class="alert alert-warning">
+                This poll is closed.
+                <a href="{{ url_for('polls.results', poll_id=poll.id) }}" class="alert-link">View Results</a>
+            </div>
+            {% endif %}
+            {% endif %}
+        </div>
+    </div>
+
+    {% if current_user.is_authenticated and current_user.id == poll.creator_id %}
+    <div class="mt-4">
+        <h3>Admin Actions</h3>
+        <div class="d-flex gap-2">
+            {% if poll.is_active %}
+            <form method="POST" action="{{ url_for('polls.close', poll_id=poll.id) }}">
+                {{ form.csrf_token }}
+                <button type="submit" class="btn btn-warning"
+                    onclick="return confirm('Are you sure you want to close this poll?')">
+                    Close Poll
+                </button>
+            </form>
+            {% endif %}
+            <form method="POST" action="{{ url_for('polls.delete', poll_id=poll.id) }}">
+                {{ form.csrf_token }}
+                <button type="submit" class="btn btn-danger"
+                    onclick="return confirm('Are you sure you want to delete this poll? This action cannot be undone.')">
+                    Delete Poll
+                </button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
