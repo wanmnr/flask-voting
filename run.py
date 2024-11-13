@@ -6,7 +6,6 @@ from dotenv import load_dotenv
 from app.config import configs
 from app import create_app
 from app.utils.logger import setup_logging, get_logger
-from app.core.cli import register_commands
 
 # Load environment variables
 def load_environment():
@@ -40,7 +39,7 @@ def get_app_settings():
 
 def initialize_app():
     # Setup logging first
-    setup_logging()
+    setup_logging(log_level='DEBUG')
 
     # Get logger after setup
     logger = get_logger()
@@ -58,7 +57,6 @@ def initialize_app():
     app = create_app(configs[env])
     logger.info("Flask application created successfully")
 
-    register_commands(app)
     logger.info("Flask commands registered successfully")
 
     return app
