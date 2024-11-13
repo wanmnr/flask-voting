@@ -1,11 +1,43 @@
 # app/config/_default.py
 import os
+from pathlib import Path
 from datetime import timedelta
 from dotenv import load_dotenv
 
-load_dotenv()
-
 class DefaultConfig:
+    ROOT_DIR = Path(__file__).resolve().parent.parent.parent
+    ENV_FILE = ROOT_DIR / '.env'
+
+    print(f"Looking for .env file at: {ENV_FILE}")
+    print(f"File exists: {ENV_FILE.exists()}")
+
+    # Load with debug=True to see what's being loaded
+    load_dotenv(ENV_FILE, override=True, verbose=True)
+
+    # Debug prints
+    print("Current directory:", ROOT_DIR)
+
+    def __init__(self):
+        # Print all environment variables for debugging
+        print("Current environment variables:")
+        for key, value in os.environ.items():
+            if key in ['DATABASE_URL', 'SECRET_KEY', 'API_KEY']:
+                print(f"{key}: {value}")
+
+    @classmethod
+    def get_env(cls, key, default=None):
+        value = os.environ.get(key, default)
+        print(f"Getting {key}: {value}")
+        return value
+
+    @property
+    def DATABASE_URL(self):
+        return self.get_env('DATABASE_URL')
+
+    @property
+    def SECRET_KEY(self):
+        return self.get_env('SECRET_KEY')
+
     """Base configuration."""
     # Default settings that are common across all environments
     APP_NAME = "Voting System"
@@ -15,8 +47,12 @@ class DefaultConfig:
     DEBUG = os.getenv("FLASK_DEBUG", "0") == "1"
     DEVELOPMENT = os.getenv("FLASK_ENV", "production") == "development"
 
+
+    # Database path in project root
+    DB_PATH = ROOT_DIR / 'instance/app.db'
+
     # Default database settings (from .env)
-    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "sqlite:///instance/app.db")
+    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # Default cache settings (from .env)
