@@ -1,33 +1,37 @@
 # app/__init__.py
-
+import os
 from flask import Flask, request, session
-from .extensions import init_db, login_manager, init_login_manager, init_assets
+from .config import configs
+from .extensions import db, migrate, login_manager, init_login_manager, assets
 from .models.user import User  # Your models
 from .core.errors import register_error_handlers
 from .utils.utils import get_context_processors
+from .cli import register_commands
 
-# Initialize Babel for internationalization
-# babel = Babel()
-
-# def get_locale():
-#     if 'language' in session:
-#         return session['language']
-#     return request.accept_languages.best_match(['en', 'es', 'fr'])
-
-def create_app(config_object):
+def create_app(config_name=None):
     """Create application factory."""
-    app = Flask(__name__, instance_relative_config=True)
+    app = Flask(__name__)
 
-    # Load the configuration
-    app.config.from_object(config_object)
+    # Load default configuration
+    app.config.from_object(configs['default'])
 
-    # Load instance config if it exists
-    app.config.from_pyfile('config.py', silent=True)
+    # Override with environment-specific configuration
+    if config_name is None:
+        config_name = os.getenv('FLASK_ENV', 'development')
+
+    if config_name in configs:
+        app.config.from_object(configs[config_name])
+
+    # Optional: Override with instance configuration file if it exists
+    instance_config = os.path.join(app.instance_path, 'config.py')
+    if os.path.exists(instance_config):
+        app.config.from_pyfile(instance_config)
 
     # Initialize login manager first
     with app.app_context():
-        init_assets(app)
-        init_db(app)
+        assets.init_app(app)
+        db.init_app(app)
+        migrate.init_app(app, db)
         init_login_manager(app)
 
     # Cross-extension setup
@@ -35,19 +39,11 @@ def create_app(config_object):
     def load_user(user_id):
         return User.query.get(int(user_id))
 
-    # Initialize extensions
-    # extensions = [
-    #     db, assets, mail,
-    #     limiter, jwt, csrf
-    # ]
-    # for extension in extensions:
-    #     extension.init_app(app)
-
     # Register error handlers
     register_error_handlers(app)
 
     # Register cli commands
-    # register_commands(app)
+    register_commands(app)
 
     # Register context processor
     app.context_processor(get_context_processors())
