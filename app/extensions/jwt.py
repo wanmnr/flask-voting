@@ -1,7 +1,9 @@
 # app/extensions/jwt.py
-from ..app_extensions import jwt
+from flask_jwt_extended import JWTManager
 from flask import Flask, jsonify
 from ..models.user import User
+
+jwt = JWTManager()
 
 def init_jwt(app: Flask) -> None:
     """Initialize JWT with error handlers and callbacks"""
