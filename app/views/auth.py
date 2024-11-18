@@ -1,12 +1,16 @@
 # app/views/auth.py
 
-from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask import Blueprint, current_app, render_template, redirect, session, url_for, flash, request
+from urllib.parse import urlparse
 from flask_login import login_user, logout_user, login_required, current_user
-from app.models.user import User
+from flask_principal import Identity, AnonymousIdentity, identity_changed
 from app.extensions.mail import send_email
 from app.extensions.limiter import limiter
 from app.extensions.db import db
-from urllib.parse import urlparse
+from app.models.user import User
+from app.services.auth.auth_service import AuthenticationService
+from app.forms.login_form import LoginForm
+from app.forms.register_form import RegisterForm
 from app.forms.login_form import LoginForm
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
@@ -19,14 +23,30 @@ def login():
 
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
-        if user and user.check_password(form.password.data):
+        # Create an instance of AuthenticationService
+        auth_service = AuthenticationService()
+        success, user, message = auth_service.validate_login(
+            form.username.data,
+            form.password.data
+        )
+
+        if success:
+            # Login user and start session
             login_user(user, remember=form.remember_me.data)
+            session.permanent = True  # Make session permanent if remember me is checked
+
+            # Set up user identity for Flask-Principal
+            identity_changed.send(current_app._get_current_object(),
+                               identity=Identity(user.id))
+
+            flash('Successfully logged in!', 'success')
+
             next_page = request.args.get('next')
             if not next_page or urlparse(next_page).netloc != '':
                 next_page = url_for('main.home')
             return redirect(next_page)
-        flash('Invalid username or password', 'error')
+
+        flash(message, 'error')
 
     return render_template('auth/login.html', form=form)
 
@@ -35,40 +55,46 @@ def login():
 @auth_bp.route('/register', methods=['GET', 'POST'])
 @limiter.limit("3 per hour")
 def register():
-    if request.method == 'POST':
-        username = request.form.get('username')
-        email = request.form.get('email')
-        password = request.form.get('password')
+    form = RegisterForm()
+    if form.validate_on_submit():
+        auth_service = AuthenticationService()
+        success, message, user = auth_service.register_user({
+            'username': form.username.data,
+            'email': form.email.data,
+            'password': form.password.data,
+            'first_name': form.first_name.data,
+            'last_name': form.last_name.data
+        })
 
-        if User.query.filter_by(username=username).first():
-            flash('Username already exists')
-            return redirect(url_for('auth.register'))
+        if success and user:
+            login_user(user)  # Auto-login after registration
+            flash('Registration successful! Welcome!', 'success')
+            return redirect(url_for('main.home'))
 
-        user = User(username=username, email=email)
-        user.set_password(password)
-        db.session.add(user)
-        db.session.commit()
+        flash(message, 'error')
 
-        # Send welcome email after successful registration
-        send_email(
-            'Welcome',
-            ['user@example.com'],
-            'welcome',
-            user_name='John'
-        )
+    return render_template('auth/register.html', form=form)
 
-        return redirect(url_for('auth.login'))
-
-    return render_template('auth/register.html')
-
-@auth_bp.route('/forgot-password', methods=['GET', 'POST'])
-@limiter.limit("3 per hour")
-def forgot_password():
-    return render_template('auth/forgot_password.html')
 
 
 @auth_bp.route('/logout')
 @login_required
 def logout():
+    # Clear session
+    session.clear()
+
+    # Logout user
     logout_user()
+
+    # Remove user identity for Flask-Principal
+    identity_changed.send(current_app._get_current_object(),
+                        identity=AnonymousIdentity())
+
+    flash('You have been logged out.', 'info')
     return redirect(url_for('main.home'))
+
+
+@auth_bp.route('/forgot-password', methods=['GET', 'POST'])
+@limiter.limit("3 per hour")
+def forgot_password():
+    return render_template('auth/forgot_password.html')
