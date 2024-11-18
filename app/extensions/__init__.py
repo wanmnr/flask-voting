@@ -27,7 +27,7 @@ __all__ = [
     'db',
     'jwt', 'init_jwt',
     'limiter',
-    'login_manager', 'init_login_manager',
+    'login_manager',
     'mail', 'init_mail',
     'principal',
     'security', 'init_security',
