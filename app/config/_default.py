@@ -4,6 +4,11 @@ from pathlib import Path
 from datetime import timedelta
 from dotenv import load_dotenv
 
+from app.extensions import db
+
+# env_path = Path('.') / '.env'
+# load_dotenv(env_path)
+
 class DefaultConfig:
     ROOT_DIR = Path(__file__).resolve().parent.parent.parent
     ENV_FILE = ROOT_DIR / '.env'
@@ -23,20 +28,6 @@ class DefaultConfig:
         for key, value in os.environ.items():
             if key in ['DATABASE_URL', 'SECRET_KEY', 'API_KEY']:
                 print(f"{key}: {value}")
-
-    @classmethod
-    def get_env(cls, key, default=None):
-        value = os.environ.get(key, default)
-        print(f"Getting {key}: {value}")
-        return value
-
-    @property
-    def DATABASE_URL(self):
-        return self.get_env('DATABASE_URL')
-
-    @property
-    def SECRET_KEY(self):
-        return self.get_env('SECRET_KEY')
 
     """Base configuration."""
     # Default settings that are common across all environments
@@ -61,8 +52,12 @@ class DefaultConfig:
     CACHE_DEFAULT_TIMEOUT = 300
 
     # Default session settings (from .env)
-    SESSION_TYPE = "redis"
-    PERMANENT_SESSION_LIFETIME = timedelta(days=1)
+    PERMANENT_SESSION_LIFETIME = timedelta(days=7)
+    SESSION_TYPE = "redis" # Options: filesystem, redis, memcached, sqlalchemy
+    SESSION_FILE_DIR = '/tmp/flask_session'  # For filesystem sessions
+    SESSION_KEY_PREFIX = 'flask_session:'  # For redis/memcached
+    SESSION_SQLALCHEMY = db  # For sqlalchemy sessions
+    SESSION_SQLALCHEMY_TABLE = 'sessions'  # For sqlalchemy sessions
 
     # Default cookies settings (from .env)
     REMEMBER_COOKIE_DURATION = timedelta(days=14)  # For "remember me" functionality
@@ -137,8 +132,23 @@ class DefaultConfig:
         'ENABLE_FILE_UPLOAD': os.getenv("ENABLE_FILE_UPLOAD", "1") == "1",
     }
 
-    # Default Admin Interface settings
+    # Flask-Security configuration
+    SECURITY_PASSWORD_SALT = 'your-security-password-salt'
+    SECURITY_REGISTERABLE = True
+    SECURITY_CONFIRMABLE = True
+    SECURITY_RECOVERABLE = True
+    SECURITY_CHANGEABLE = True
+    SECURITY_POST_LOGIN_VIEW = '/admin'
+    SECURITY_POST_LOGOUT_VIEW = '/admin'
+
+    # Default Flask-Admin Interface settings
     FLASK_ADMIN_SWATCH = 'cerulean'
+
+    # AdminLTE3 configuration
+    FLASK_ADMIN_SWATCH = 'cosmo'
+    ADMINLTE_THEME = True
+    ADMINLTE_LEGACY_USER_MENU = False
+    ADMINLTE_SEARCH_FORM = False
 
     # Default Debug Toolbar settings (from .flaskenv)
     DEBUG_TB_ENABLED = os.getenv("FLASK_ENV") == "development"
