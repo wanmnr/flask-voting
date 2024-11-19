@@ -4,43 +4,74 @@
 {% block title %}Sign Up{% endblock %}
 
 {% block content %}
-<div class="container py-4">
-    <h2>Sign Up</h2>
+<div class="container py-5">
+  <div class="row justify-content-center">
+      <div class="col-md-8 col-lg-6">
+          <div class="card shadow-sm">
+              <div class="card-body p-4">
+                  <h2 class="text-center mb-4">Create Your Account</h2>
+                  {% with messages = get_flashed_messages() %}
+                  {% if messages %}
+                  {% for message in messages %}
+                  <div class="alert alert-danger">{{ message }}</div>
+                  {% endfor %}
+                  {% endif %}
+                  {% endwith %}
 
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    {% for message in messages %}
-    <div class="alert alert-danger">{{ message }}</div>
-    {% endfor %}
-    {% endif %}
-    {% endwith %}
+                  <form method="POST">
+                      {{ form.hidden_tag() }}
+                      <div class="mb-3">
+                          {{ form.username.label }}
+                          {{ form.username(class="form-control") }}
+                          {% if form.username.errors %}
+                              {% for error in form.username.errors %}
+                                  <span class="text-danger">{{ error }}</span>
+                              {% endfor %}
+                          {% endif %}
+                      </div>
 
-    <form method="POST">
-        <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" required>
+                      {{ form.hidden_tag() }}
+                      <div class="mb-3">
+                          {{ form.email.label }}
+                          {{ form.email(class="form-control") }}
+                          {% if form.email.errors %}
+                              {% for error in form.email.errors %}
+                                  <span class="text-danger">{{ error }}</span>
+                              {% endfor %}
+                          {% endif %}
+                      </div>
+
+                      {{ form.hidden_tag() }}
+                      <div class="mb-3">
+                          {{ form.password.label }}
+                          {{ form.password(class="form-control") }}
+                          {% if form.password.errors %}
+                              {% for error in form.password.errors %}
+                                  <span class="text-danger">{{ error }}</span>
+                              {% endfor %}
+                          {% endif %}
+                      </div>
+
+                      {{ form.hidden_tag() }}
+                      <div class="mb-3">
+                          {{ form.confirm_password.label }}
+                          {{ form.confirm_password(class="form-control", required=True) }}
+                          {% if form.confirm_password.errors %}
+                              {% for error in form.confirm_password.errors %}
+                                  <span class="text-danger">{{ error }}</span>
+                              {% endfor %}
+                          {% endif %}
+                      </div>
+
+                      {{ form.submit(class="btn btn-primary") }}
+                  </form>
+
+                  <div class="auth-links">
+                      Already have an account? <a href="{{ url_for('auth.login') }}">Login here</a>
+                  </div>
+                </div>
+            </div>
         </div>
-
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required>
-        </div>
-
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
-        </div>
-
-        <div class="form-group">
-            <label for="confirm_password">Confirm Password</label>
-            <input type="password" id="confirm_password" name="confirm_password" required>
-        </div>
-
-        <button type="submit" class="btn-primary">Sign Up</button>
-    </form>
-
-    <div class="auth-links">
-        Already have an account? <a href="{{ url_for('auth.login') }}">Login here</a>
     </div>
 </div>
 {% endblock %}
