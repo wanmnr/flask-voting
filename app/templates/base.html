@@ -1,3 +1,4 @@
+<!-- app/templates/base.html -->
 <!DOCTYPE html>
 <html lang="en" class="h-100">
 
@@ -34,71 +35,47 @@
           <link rel="stylesheet" href="{{ ASSET_URL }}">
       {% endassets %}
     {% endblock %}
-
-    {# Skip to main content link for keyboard navigation #}
-    <style>
-        .skip-to-main {
-            position: absolute;
-            left: -9999px;
-            z-index: 9999;
-            padding: 1em;
-            background-color: var(--bs-primary);
-            color: white;
-            text-decoration: none;
-        }
-
-        .skip-to-main:focus {
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .page-wrapper {
-            display: flex;
-            flex: 1 0 auto;
-        }
-
-        .main-content {
-            flex: 1;
-            padding: 1rem;
-        }
-    </style>
 </head>
 
-<body class="d-flex flex-column h-100">
+<body class="min-vh-100">
     {# Skip to main content link #}
-    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+    <a href="#main-content" class="visually-hidden-focusable">Skip to main content</a>
 
     {# Navbar #}
     {% include 'layout/navbar.html' %}
 
-
-    <div class="page-wrapper">
-        <aside class="sidebar sidebar-wrapper bg-light border-end" aria-label="Navigation sidebar">
-            <div class="p-3">
-                {% block sidebar %}
-                {% include 'layout/sidebar.html' %}
-                {# Optional: Allow pages to add additional sidebar content if needed #}
-                {% endblock %}
+    <div class="container-fluid">
+        <div class="row min-vh-100">
+            <!-- Sidebar -->
+            <div class="col-12 col-md-4 col-lg-3 bg-light border-end px-0">
+                <aside aria-label="Navigation sidebar">
+                    <div class="p-3">
+                        {% block sidebar %}
+                        {% include 'layout/sidebar.html' %}
+                        {% endblock %}
+                    </div>
+                </aside>
             </div>
-        </aside>
 
-        <div class="main-wrapper flex-grow-1">
-            <div class="container mt-3" role="alert" aria-live="polite">
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                {% for category, message in messages %}
-                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <!-- Main Content Area -->
+            <div class="col-12 col-md-8 col-lg-9 px-0">
+                <div class="container mt-3" role="alert" aria-live="polite">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                    {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    {% endwith %}
                 </div>
-                {% endfor %}
-                {% endif %}
-                {% endwith %}
-            </div>
 
-            <main id="main-content" class="main-content" role="main">
-                {% block content %}{% endblock %}
-            </main>
+                <main id="main-content" class="p-3" role="main">
+                    {% block content %}{% endblock %}
+                </main>
+            </div>
         </div>
     </div>
 
