@@ -1,31 +1,26 @@
 <!-- app/templates/pages/about.html -->
-{% extends "base.html" %}
+
+{% extends "pages/_base_page.html" %}
 
 {% block title %}About{% endblock %}
 
-{% block meta_description %}about{% endblock %}
-
-{% block sidebar %}
-{{ super() }}
-{% endblock %}
+{% block meta_description %}Learn about our organization's mission and team{% endblock %}
 
 {% block content %}
-<h1>About Us</h1>
-<p>Learn more about our organization and what we do.</p>
-<div class="about-section">
-    <h2>Our Mission</h2>
-    <p>We are dedicated to providing high-quality services and solutions to our customers.</p>
+<div class="container py-4">
+    <h1 class="mb-4">About Us</h1>
+    <div class="row">
+        <div class="col-12">
+            <section class="mb-5">
+                <h2 class="h3 mb-3">Our Mission</h2>
+                <p>We are dedicated to providing high-quality services and solutions to our customers.</p>
+            </section>
 
-    <h2>Our Team</h2>
-    <p>Our team consists of passionate individuals working together to achieve excellence.</p>
+            <section>
+                <h2 class="h3 mb-3">Our Team</h2>
+                <p>Our team consists of passionate individuals working together to achieve excellence.</p>
+            </section>
+        </div>
+    </div>
 </div>
-{% endblock %}
-
-
-{% block styles %}
-<!-- Page-specific CSS here -->
-{% endblock %}
-
-{% block scripts %}
-<!-- Page-specific JavaScript here -->
 {% endblock %}
