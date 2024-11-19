@@ -1,48 +1,42 @@
-<!-- app/templates/components/sidebar.html -->
+<!-- app/templates/layout/sidebar.html -->
 
 <!-- Quick Links Section -->
-<div class="mb-4">
-    <h3 class="h5 fw-bold border-bottom pb-2 mb-3">Quick Links</h3>
-    <div class="nav flex-column">
-        <a href="#" class="nav-link {% if sidebar_data and sidebar_data.current_section=='home' %}active{% endif %}">
-            <i class="bi bi-book me-2"></i>Documentation
-        </a>
-        <a href="#" class="nav-link {% if sidebar_data and sidebar_data.current_section=='about' %}active{% endif %}">
-            <i class="bi bi-rocket-takeoff me-2"></i>Getting Started
-        </a>
-        <a href="#" class="nav-link">
-            <i class="bi bi-mortarboard me-2"></i>Tutorials
-        </a>
-        <a href="#" class="nav-link">
-            <i class="bi bi-code-square me-2"></i>API Reference
-        </a>
-    </div>
+<div class="list-group mb-4">
+  <h3 class="list-group-item list-group-item-primary fw-bold">Quick Links</h3>
+  <a href="#" class="list-group-item list-group-item-action d-flex align-items-center {% if sidebar_data and sidebar_data.current_section=='home' %}active{% endif %}">
+      <i class="bi bi-book me-2"></i>Documentation
+  </a>
+  <a href="#" class="list-group-item list-group-item-action d-flex align-items-center {% if sidebar_data and sidebar_data.current_section=='about' %}active{% endif %}">
+      <i class="bi bi-rocket-takeoff me-2"></i>Getting Started
+  </a>
+  <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+      <i class="bi bi-mortarboard me-2"></i>Tutorials
+  </a>
+  <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+      <i class="bi bi-code-square me-2"></i>API Reference
+  </a>
 </div>
 
 <!-- Announcements Section -->
 {% if sidebar_data and sidebar_data.announcements %}
-<div class="mb-4">
-    <h3 class="h5 fw-bold border-bottom pb-2 mb-3">Announcements</h3>
-    <div class="nav flex-column">
-        {% for announcement in sidebar_data.announcements %}
-        <a href="{{ announcement.link }}" class="nav-link">
-            <i class="bi bi-megaphone me-2"></i>{{ announcement.title }}
-        </a>
-        {% endfor %}
-    </div>
+<div class="list-group mb-4">
+  <h3 class="list-group-item list-group-item-primary fw-bold">Announcements</h3>
+  {% for announcement in sidebar_data.announcements %}
+  <a href="{{ announcement.link }}" class="list-group-item list-group-item-action d-flex align-items-center">
+      <i class="bi bi-megaphone me-2"></i>{{ announcement.title }}
+  </a>
+  {% endfor %}
 </div>
 {% endif %}
 
 <!-- Team Information Section -->
 {% if sidebar_data and sidebar_data.team_links %}
-<div class="mb-4">
-    <h3 class="h5 fw-bold border-bottom pb-2 mb-3">Team Information</h3>
-    <div class="nav flex-column">
-        {% for link in sidebar_data.team_links %}
-        <a href="{{ link.link }}" class="nav-link">
-            <i class="bi bi-people me-2"></i>{{ link.name }}
-        </a>
-        {% endfor %}
-    </div>
+<div class="list-group mb-4">
+  <h3 class="list-group-item list-group-item-primary fw-bold">Team Information</h3>
+  {% for link in sidebar_data.team_links %}
+  <a href="{{ link.link }}" class="list-group-item list-group-item-action d-flex align-items-center">
+      <i class="bi bi-people me-2"></i>{{ link.name }}
+  </a>
+  {% endfor %}
 </div>
 {% endif %}
